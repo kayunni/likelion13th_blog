@@ -1,4 +1,5 @@
 package likelion13th.blog.controller;
+
 import likelion13th.blog.dto.*;
 import likelion13th.blog.service.ArticleService;
 import org.springframework.http.HttpStatus;
@@ -30,12 +31,12 @@ public class ArticleController {
 
     @GetMapping("/{id}")
     public ResponseEntity<ApiResponse> readArticle(@PathVariable Long id){
-        ArticleResponse response = articleService.getArticle(id);
+        ArticleDetailResponse response = articleService.getArticle(id);
         return ResponseEntity.ok(new ApiResponse(true, 200, "게시글 조회 성공", response));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ApiResponse> updateArticle(@PathVariable Long id, @RequestBody AddArticleRequest request){
+    public ResponseEntity<ApiResponse> updateArticle(@PathVariable Long id, @RequestBody UpdateArticleRequest request){
         ArticleResponse response = articleService.updateArticle(id, request);
 
         return ResponseEntity.ok(new ApiResponse(true, 204, "게시글 수정 성공", response));
