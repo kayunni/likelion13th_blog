@@ -1,9 +1,11 @@
 package likelion13th.blog.service;
 
 import jakarta.persistence.*;
+import jakarta.transaction.Transactional;
 import likelion13th.blog.domain.Article;
 import likelion13th.blog.dto.AddArticleRequest;
 import likelion13th.blog.dto.ArticleResponse;
+import likelion13th.blog.dto.DeleteRequest;
 import likelion13th.blog.dto.SimpleArticleResponse;
 import likelion13th.blog.repository.ArticleRepository;
 import lombok.*;
@@ -52,5 +54,35 @@ public class ArticleService {
 
         /*2. ArticleResponse DTO 생성하여 반환 */
         return ArticleResponse.of(article);
+    }
+
+    @Transactional
+    public ArticleResponse updateArticle(Long id, AddArticleRequest request) {
+
+        /*1. DB에서 id가 일치하는 게시글부터 찾는다*/
+        Article article = articleRepository.findById(id)
+                .orElseThrow(()-> new EntityNotFoundException("해당 ID의 게시글을 찾을 수 없습니다."));
+
+        /*2. 비밀번호가 일치하는지 확인하기*/
+        if (!article.getPassword().equals(request.getPassword())) {
+            throw new RuntimeException("해당 글에 대한 수정권한이 없습니다.");
+        }
+        /*3. 게시글 수정 후 저장하기*/
+        article.update(request.getTitle(), request.getContent());
+        article = articleRepository.save(article);
+
+        /*4. ArticleResponse로 변환하여 반환*/
+        return ArticleResponse.of(article);
+    }
+    @Transactional
+    public void deleteArticle(Long id, DeleteRequest request) {
+        Article article = articleRepository.findById(id)
+                .orElseThrow(()->new EntityNotFoundException("해당 ID의 게시글을 찾을 수 없습니다."));
+
+        if (!request.getPassword().equals(article.getPassword())) {
+            throw new RuntimeException("해당 글에 대한 수정권한이 없습니다.");
+        }
+
+        articleRepository.deleteById(id);
     }
 }
