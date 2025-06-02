@@ -1,6 +1,9 @@
 package likelion13th.blog.controller;
 
-import likelion13th.blog.dto.*;
+import likelion13th.blog.dto.request.AddCommentRequest;
+import likelion13th.blog.dto.request.DeleteRequest;
+import likelion13th.blog.dto.response.ApiResponse;
+import likelion13th.blog.dto.response.CommentResponse;
 import likelion13th.blog.service.CommentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.*;

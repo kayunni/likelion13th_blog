@@ -1,6 +1,5 @@
-package likelion13th.blog.dto;
+package likelion13th.blog.dto.response;
 
-import likelion13th.blog.domain.Article;
 import likelion13th.blog.domain.Comment;
 import java.time.LocalDateTime;
 import lombok.*;
